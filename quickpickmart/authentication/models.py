@@ -27,12 +27,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     lastname = models.CharField(max_length=30)
     username = models.CharField(max_length=30, unique=True)
     email = models.EmailField(unique=True)
-    mobile_number = models.CharField(max_length=15, blank=True, null=True)
     date_joined = models.DateTimeField(auto_now_add=True)
-    mobile_verified = models.BooleanField(default=False)
-    mobile_otp = models.CharField(max_length=6, blank=True, null=True)
     email_verified = models.BooleanField(default=False)
-    email_verification_token = models.CharField(max_length=255, blank=True, null=True)
+    email_otp = models.CharField(max_length=6, blank=True, null=True)
     
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

@@ -10,7 +10,7 @@ class SignupForm(forms.ModelForm):
     
     class Meta:
         model = CustomUser
-        fields = ['firstname', 'lastname', 'username', 'email', 'mobile_number', 'password']
+        fields = ['firstname', 'lastname', 'username', 'email', 'password']
         
     def clean(self):
         cleaned_data = super().clean()
@@ -26,6 +26,6 @@ class LoginForm(AuthenticationForm):
     username = forms.EmailField(label="Email")
     
     
-#  Mobile OTP Verification Form
-class VerifyMobileForm(forms.Form):
+# Email OTP Verification Form
+class VerifyEmailForm(forms.Form):
     otp = forms.CharField(max_length=6, required=True)
