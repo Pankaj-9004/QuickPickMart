@@ -90,7 +90,7 @@ def login_view(request):
     if request.method == "POST":
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
-            email = form.cleaned_data['username']
+            email = form.cleaned_data['username']  # Email is stored in 'username'
             password = form.cleaned_data['password']
             user = authenticate(request, username=email, password=password)
             if user:
@@ -101,6 +101,7 @@ def login_view(request):
                 messages.error(request, "Invalid credentials.")
     else:
         form = LoginForm()
+
     return render(request, 'authentication/login.html', {'form': form})
 
 
@@ -109,3 +110,6 @@ def logout_view(request):
     logout(request)
     messages.success(request, "You have been logged out.")
     return redirect('login')
+
+
+# Profile View
