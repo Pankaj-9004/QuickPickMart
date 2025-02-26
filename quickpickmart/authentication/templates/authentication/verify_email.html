@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="verify-page">
+    <h1 class="verify-logo">QuickPickMart</h1> <!-- Logo outside the form -->
+
+    <div class="verify-container">
+        <h2 class="verify-title">Verify Your Email</h2> <!-- Title inside form -->
+        <p class="verify-text">We have sent an OTP to your email. Please enter it below to verify your account.</p>
+
+        <form method="POST" class="verify-form">
+            {% csrf_token %}
+            <div class="verify-form-group">
+                <label for="otp">Enter OTP</label>
+                {{ form.otp }}
+            </div>
+            <button type="submit" class="verify-btn">Verify</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

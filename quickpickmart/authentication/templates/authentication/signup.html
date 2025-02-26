@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="signup-page">
+    <h1 class="signup-logo">QuickPickMart</h1> <!-- Logo outside the form -->
+
+    <div class="signup-container">
+        <h2 class="signup-title">Create Account</h2> <!-- Title inside form -->
+        <form method="POST" class="signup-form">
+            {% csrf_token %}
+
+            <div class="signup-form-group">
+                {{ form.firstname }}
+            </div>
+
+            <div class="signup-form-group">
+                {{ form.lastname }}
+            </div>
+
+            <div class="signup-form-group">
+                {{ form.username }}
+            </div>
+
+            <div class="signup-form-group">
+                {{ form.email }}
+            </div>
+
+            <div class="signup-form-group">
+                {{ form.password }}
+            </div>
+
+            <div class="signup-form-group">
+                {{ form.confirm_password }}
+            </div>
+
+            <button type="submit" class="signup-btn">Sign Up</button>
+        </form>
+    </div>
+
+    <!-- New Amazon-Style Login Button -->
+    <div class="signup-existing-user">
+        <p>Already have an account?</p>
+        <a href="{% url 'login' %}" class="signup-login-btn">Sign in</a>
+    </div>
+</div>
+{% endblock %}

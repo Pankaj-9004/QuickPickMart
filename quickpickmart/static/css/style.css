@@ -1,0 +1,87 @@
+/* General Styles */
+body {
+    background-color: #fff; /* White background */
+    color: #000; /* Black text */
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    padding: 10px 20px;
+    height: 50px;
+}
+
+/* Search Bar */
+.search-form input {
+    width: 200px;
+}
+
+.search-form button {
+    width: 40px;
+    padding: 8px;
+    margin-top: 4px;
+}
+
+/* Main Content */
+.main-content {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh; /* Ensure it covers full height */
+    margin: 0 auto; /* Center the content */
+    padding: 20px;
+    background: #fff; /* White background */
+}
+
+/* Divider Above Footer */
+.divider {
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+}
+
+/* Footer */
+.footer {
+    width: 100%; /* Full width but with controlled content */
+    max-width: 100%;
+    padding: 5px 0; /* Reduce padding */
+    background: #222; /* Dark footer */
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    margin-top: auto; /* Push footer to bottom without extra space */
+}
+
+/* Remove the gap above the footer */
+.container.main-content {
+    flex: 1; /* Make the content take the available space */
+    padding-bottom: 0; /* Remove bottom padding */
+    margin-bottom: 0; /* Remove bottom margin */
+}
+
+.footer a {
+    color: #fff;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+/* Centering Forms */
+.container.d-flex {
+    min-height: 80vh;
+}
+
+/* Signup Form */
+.signup-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
