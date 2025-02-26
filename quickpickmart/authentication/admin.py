@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import CustomUser, Profile, Address
+
 
 # Register your models here.
 
@@ -24,3 +25,14 @@ class CustomUserAdmin(UserAdmin):
             'fields': ('email', 'username', 'firstname', 'lastname', 'password1', 'password2')
         }),
     )
+    
+    
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'mobile_number', 'date_of_birth', 'gender')
+
+
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ('user', 'street_address', 'city', 'state', 'country', 'zip_code', 'is_default')
+    list_filter = ('is_default', 'city', 'state', 'country')
