@@ -2,6 +2,7 @@
 .signup-page {
     text-align: center;
     margin-top: 50px;
+    margin-top: -4px;
 }
 
 .signup-logo {
@@ -40,6 +41,18 @@
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+.hr1{
+    width: 90px;
+    margin-left: 695px;
+    margin-bottom   : -13px;
+}
+.hr2{
+    width: 90px;
+    margin-left: 435px;
+    margin-top: -25px;
+
+}
+
 
 /* Sign Up Button */
 .signup-btn {
@@ -74,9 +87,9 @@
     display: inline-block;
     width: 100%;
     max-width: 350px;
-    padding: 10px;
+    padding: 5px;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 20px;
     border: 1px solid #ccc;
     color: black;
     text-decoration: none;
@@ -85,7 +98,8 @@
 }
 
 .signup-login-btn:hover {
-    background: #f0f0f0;
+    background: #e68900;
+    color: white;
 }
 
 
@@ -97,6 +111,7 @@
     justify-content: center;
     height: 100vh;
     background-color: #f8f9fa;
+    margin-top: -60px;
 }
 
 .login-logo {
@@ -112,7 +127,7 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 400px;
+    max-width: 290px;
     text-align: center;
 }
 
@@ -182,9 +197,9 @@
     display: inline-block;
     width: 100%;
     max-width: 400px;
-    padding: 10px;
+    padding: 5px 10px 5px 10px;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 15px;
     border: 1px solid #ccc;
     color: black;
     text-decoration: none;
@@ -193,7 +208,8 @@
 }
 
 .login-signup-btn:hover {
-    background: #f0f0f0;
+    background: #e68a00;
+    color: white;
 }
 
 
@@ -276,4 +292,15 @@
 .verify-btn:hover {
     background-color: #e68a00;
     transform: translateY(-2px);
+}
+.login_hr{
+    width: 70px;
+}
+.login_hr1{
+    width: 70px;
+    margin-left: 225px;
+    margin-top:-25px;
+}
+.login_hr_box{
+    margin-top: -30px;
 }
