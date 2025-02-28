@@ -293,9 +293,11 @@
     background-color: #e68a00;
     transform: translateY(-2px);
 }
+
 .login_hr{
     width: 70px;
 }
+
 .login_hr1{
     width: 70px;
     margin-left: 225px;
