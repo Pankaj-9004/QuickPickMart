@@ -12,14 +12,19 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Username is required')
         
         email = self.normalize_email(email)
+        extra_fields.setdefault('is_active', False)
+        
         user = self.model(email=email, username=username, **extra_fields)
-        user.set_password(password)
+        if password:
+            user.set_password(password)
+            
         user.save(using=self._db)
         return user
 
     def create_superuser(self, email, username, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
         
         user = self.create_user(email, username, password, **extra_fields)
         user.set_password(password)  # Ensure password is hashed
@@ -36,7 +41,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     email_verified = models.BooleanField(default=False)
     email_otp = models.CharField(max_length=6, blank=True, null=True)
     
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     
     groups = models.ManyToManyField("auth.Group", related_name="customuser_groups", blank=True)

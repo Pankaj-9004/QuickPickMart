@@ -8,21 +8,21 @@ from .models import CustomUser, Profile, Address
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
     list_display = ('email', 'username', 'firstname', 'lastname', 'is_staff', 'is_active')
-    list_filter = ('is_staff', 'is_active')
-    search_fields = ('email', 'username')
+    list_filter = ('is_staff', 'is_active', 'is_superuser', 'groups')
+    search_fields = ('email', 'username', 'firstname', 'lastname')
     ordering = ('email',)
     
     fieldsets = (
-        (None, {'fields': ('email', 'username', 'password')}),
+        ('User Info', {'fields': ('email', 'username', 'password')}),
         ('Personal Info', {'fields': ('firstname', 'lastname')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active', 'groups', 'user_permissions')}),
-        ('Important dates', {'fields': ('last_login',)}),
+        ('Permissions', {'fields': ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     
     add_fieldsets = (
-        (None, {
+        ('Create User', {
             'classes': ('wide',),
-            'fields': ('email', 'username', 'firstname', 'lastname', 'password1', 'password2')
+            'fields': ('email', 'username', 'firstname', 'lastname', 'password1', 'password2', 'is_staff', 'is_active')
         }),
     )
     

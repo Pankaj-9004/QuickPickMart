@@ -144,11 +144,12 @@ EMAIL_HOST_PASSWORD = 'rlbm zoub jpan qqoj'  # Your Gmail password or app passwo
 # Login Redirect
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "/"
+LOGIN_URL = "/auth/login/"
 
 # Custom User Model
 AUTH_USER_MODEL = "authentication.CustomUser"
 
 AUTHENTICATION_BACKENDS = [
-    'authentication.backends.EmailAuthBackend',  # Our custom backend
+    'authentication.backends.EmailAuthBackend',  # Custom backend
     'django.contrib.auth.backends.ModelBackend',  # Default backend
 ]

@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.crypto import get_random_string
 from .models import CustomUser
 from .forms import SignupForm, LoginForm, VerifyEmailForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -25,19 +26,16 @@ def signup_view(request):
     if request.method == "POST":
         form = SignupForm(request.POST, request.FILES)
         if form.is_valid():
-            print("Form is valid")
-            user = form.save(commit=False)
-            user.is_active = False
-            user.save()
-            print(f"User {user.email} saved, sending OTP...")
-            send_otp_email(user)
-            request.session['user_email'] = user.email
-            print("Redirecting to verify email page")
-            return redirect('verify_email') # Redirect to OTP verification page
-        else:
-            print("Form is not valid:", form.errors)
+            user = form.save(commit=False)  # Create user instance but don't save yet
+            user.set_password(form.cleaned_data['password'])  # Hash the password
+            user.is_active = False  # Inactive until email is verified
+            user.save()  # Save user with hashed password
+            send_otp_email(user)  # Send OTP for email verification
+            request.session['user_email'] = user.email  # Store email in session
+            return redirect('verify_email')  # Redirect to OTP verification page
     else:
         form = SignupForm()
+    
     return render(request, 'authentication/signup.html', {'form': form})
 
 
@@ -90,18 +88,26 @@ def login_view(request):
     if request.method == "POST":
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
-            email = form.cleaned_data['username']  # Email is stored in 'username'
+            email = form.cleaned_data['username']  # Using email as username
             password = form.cleaned_data['password']
-            user = authenticate(request, username=email, password=password)
+            # Check if user exists
+            User = get_user_model()
+            user = User.objects.filter(email=email).first()
+            
+            if user and not user.is_active:
+                messages.error(request, "Your account is not activated. Please verify your email.")
+                return render(request, 'authentication/login.html', {'form': form})
+            # Authenticate user
+            user = authenticate(request, email=email, password=password)
+
             if user:
                 login(request, user)
                 messages.success(request, "Login successful.")
                 return redirect('home')
             else:
-                messages.error(request, "Invalid credentials.")
+                messages.error(request, "Invalid email or password.")
     else:
         form = LoginForm()
-
     return render(request, 'authentication/login.html', {'form': form})
 
 
