@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.crypto import get_random_string
-from .models import CustomUser
-from .forms import SignupForm, LoginForm, VerifyEmailForm
+from .models import CustomUser, Profile, Address
+from .forms import SignupForm, LoginForm, VerifyEmailForm, ProfileForm, AddressForm
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -119,3 +119,66 @@ def logout_view(request):
 
 
 # Profile View
+@login_required
+def profile_view(request):
+    """View to display and update user profile."""
+    profile, created = Profile.objects.get_or_create(user=request.user)  # Ensure profile exists
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated successfully.")
+            return redirect("profile")  # Redirect to the same page after saving
+    else:
+        form = ProfileForm(instance=profile)
+    return render(request, "authentication/profile.html", {"form": form})
+
+
+# Displays all saved addresses.
+@login_required
+def address_list_view(request):
+    addresses = Address.objects.filter(user=request.user)
+    return render(request, "authentication/address_list.html", {"addresses": addresses})
+
+
+# Enables users to add a new address.
+@login_required
+def add_address_view(request):
+    if request.method == "POST":
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            address = form.save(commit=False)
+            address.user = request.user  # Assign the logged-in user
+            address.save()
+            messages.success(request, "New address added successfully.")
+            return redirect("address_list")
+    else:
+        form = AddressForm()
+    return render(request, "authentication/address_form.html", {"form": form})
+
+
+# Lets users update existing addresses
+@login_required
+def edit_address_view(request, address_id):
+    address = get_object_or_404(Address, id=address_id, user=request.user)
+    if request.method == "POST":
+        form = AddressForm(request.POST, instance=address)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Address updated successfully.")
+            return redirect("address_list")
+    else:
+        form = AddressForm(instance=address)
+    return render(request, "authentication/address_form.html", {"form": form})
+
+
+# Allows users to remove an address
+@login_required
+def delete_address_view(request, address_id):
+    """View to delete an address."""
+    address = get_object_or_404(Address, id=address_id, user=request.user)
+    if request.method == "POST":
+        address.delete()
+        messages.success(request, "Address deleted successfully.")
+        return redirect("address_list")
+    return render(request, "authentication/address_delete.html", {"address": address})

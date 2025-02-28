@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-from .models import CustomUser
+from .models import CustomUser, Profile, Address
 
 
 # User Registeration Form
@@ -40,3 +40,28 @@ class LoginForm(AuthenticationForm):
 # Email OTP Verification Form
 class VerifyEmailForm(forms.Form):
     otp = forms.CharField(max_length=6, required=True)
+    
+    
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['profile_picture', 'mobile_number', 'date_of_birth', 'gender']
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'gender': forms.Select(attrs={'class': 'form-select'}),
+            'mobile_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter mobile number'}),
+        }
+        
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ['street_address', 'city', 'state', 'country', 'zip_code', 'is_default']
+        widgets = {
+            'street_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter street address'}),
+            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter city'}),
+            'state': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter state'}),
+            'country': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter country'}),
+            'zip_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter zip code'}),
+            'is_default': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }

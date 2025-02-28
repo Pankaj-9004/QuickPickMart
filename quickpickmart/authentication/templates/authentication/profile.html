@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="profile-page">
+    <div class="profile-container">
+        <h2 class="profile-title">My Profile</h2>
+
+        <!-- Profile Picture Section -->
+        <div class="profile-picture-section">
+            {% if user.profile.profile_picture %}
+                <img src="{{ user.profile.profile_picture.url }}" class="profile-picture" alt="Profile Picture">
+            {% else %}
+                <img src="{% static 'authentication/images/default_profile.jpg' %}" class="profile-picture" alt="Default Profile">
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="profile-form-group">
+                    {{ profile_form.profile_picture }}
+                </div>
+                <button type="submit" class="profile-btn">Update Photo</button>
+            </form>
+        </div>
+
+        <!-- Profile Info Section -->
+        <form method="POST" class="profile-form">
+            {% csrf_token %}
+
+            <div class="profile-form-group">
+                <label>Full Name</label>
+                <input type="text" class="form-control" value="{{ user.get_full_name }}" disabled>
+            </div>
+
+            <div class="profile-form-group">
+                <label>Email (Uneditable)</label>
+                <input type="email" class="form-control" value="{{ user.email }}" disabled>
+            </div>
+
+            <div class="profile-form-group">
+                <label>Mobile Number</label>
+                {{ profile_form.mobile_number }}
+            </div>
+
+            <div class="profile-form-group">
+                <label>Date of Birth</label>
+                {{ profile_form.date_of_birth }}
+            </div>
+
+            <div class="profile-form-group">
+                <label>Gender</label>
+                {{ profile_form.gender }}
+            </div>
+
+            <button type="submit" class="profile-btn">Save Changes</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
