@@ -121,10 +121,8 @@ def logout_view(request):
 # Profile View
 @login_required
 def profile_view(request):
-    """View to display and update user profile, ensuring username uniqueness."""
     user = request.user
     profile, created = Profile.objects.get_or_create(user=user)
-
     if request.method == "POST":
         if "update_photo" in request.POST:
             # If updating only profile picture
@@ -132,26 +130,21 @@ def profile_view(request):
             profile.save()
             messages.success(request, "Profile picture updated successfully.")
             return redirect("profile")
-
         else:  # Updating other fields
             new_username = request.POST.get("username", "").strip()
-
             # Ensure the username is unique (excluding the current user's username)
             if CustomUser.objects.exclude(id=user.id).filter(username=new_username).exists():
                 messages.error(request, "This username is already taken. Please choose another.")
             else:
                 user.username = new_username  # Update username
                 user.save()
-
                 form = ProfileForm(request.POST, request.FILES, instance=profile)
                 if form.is_valid():
                     form.save()
                     messages.success(request, "Profile updated successfully.")
                     return redirect("profile")
-
     else:
         form = ProfileForm(instance=profile)
-
     return render(request, "authentication/profile.html", {"form": form})
 
 # Displays all saved addresses.
