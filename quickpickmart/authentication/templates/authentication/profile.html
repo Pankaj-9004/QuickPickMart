@@ -17,9 +17,9 @@
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="profile-form-group">
-                    {{ profile_form.profile_picture }}
+                    <input type="file" name="profile_picture" class="form-control">
                 </div>
-                <button type="submit" class="profile-btn">Update Photo</button>
+                <button type="submit" name="update_photo" class="profile-btn">Update Photo</button>
             </form>
         </div>
 
@@ -29,7 +29,7 @@
 
             <div class="profile-form-group">
                 <label>Full Name</label>
-                <input type="text" class="form-control" value="{{ user.get_full_name }}" disabled>
+                <input type="text" class="form-control" value="{{ user.first_name }} {{ user.last_name }}" disabled>
             </div>
 
             <div class="profile-form-group">
@@ -38,18 +38,35 @@
             </div>
 
             <div class="profile-form-group">
+                <label>Username</label>
+                <input type="text" class="form-control" name="username" value="{{ user.username }}">
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if "username" in message %}
+                            <p class="error-message" style="color: red;">{{ message }}</p>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+            <div class="profile-form-group">
                 <label>Mobile Number</label>
-                {{ profile_form.mobile_number }}
+                <input type="text" class="form-control" name="mobile_number" value="{{ form.mobile_number.value|default:'' }}" placeholder="Enter mobile number">
             </div>
 
             <div class="profile-form-group">
                 <label>Date of Birth</label>
-                {{ profile_form.date_of_birth }}
+                <input type="date" class="form-control" name="date_of_birth" value="{{ form.date_of_birth.value|default:'' }}">
             </div>
 
             <div class="profile-form-group">
                 <label>Gender</label>
-                {{ profile_form.gender }}
+                <select class="form-select" name="gender">
+                    <option value="">Select Gender</option>
+                    <option value="Male" {% if form.gender.value == "Male" %}selected{% endif %}>Male</option>
+                    <option value="Female" {% if form.gender.value == "Female" %}selected{% endif %}>Female</option>
+                    <option value="Other" {% if form.gender.value == "Other" %}selected{% endif %}>Other</option>
+                </select>
             </div>
 
             <button type="submit" class="profile-btn">Save Changes</button>
