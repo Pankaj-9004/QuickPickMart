@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.conf import settings
+from django_countries.fields import CountryField
 
 # Create your models here.
 
@@ -66,15 +67,55 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user.username}'s Profile"
     
-    
+INDIAN_STATES = [
+    ("AP", "Andhra Pradesh"),
+    ("AR", "Arunachal Pradesh"),
+    ("AS", "Assam"),
+    ("BR", "Bihar"),
+    ("CT", "Chhattisgarh"),
+    ("GA", "Goa"),
+    ("GJ", "Gujarat"),
+    ("HR", "Haryana"),
+    ("HP", "Himachal Pradesh"),
+    ("JH", "Jharkhand"),
+    ("KA", "Karnataka"),
+    ("KL", "Kerala"),
+    ("MP", "Madhya Pradesh"),
+    ("MH", "Maharashtra"),
+    ("MN", "Manipur"),
+    ("ML", "Meghalaya"),
+    ("MZ", "Mizoram"),
+    ("NL", "Nagaland"),
+    ("OD", "Odisha"),
+    ("PB", "Punjab"),
+    ("RJ", "Rajasthan"),
+    ("SK", "Sikkim"),
+    ("TN", "Tamil Nadu"),
+    ("TG", "Telangana"),
+    ("TR", "Tripura"),
+    ("UP", "Uttar Pradesh"),
+    ("UT", "Uttarakhand"),
+    ("WB", "West Bengal"),
+    ("AN", "Andaman and Nicobar Islands"),
+    ("CH", "Chandigarh"),
+    ("DN", "Dadra and Nagar Haveli and Daman and Diu"),
+    ("DL", "Delhi"),
+    ("LD", "Lakshadweep"),
+    ("PY", "Puducherry"),
+]
+
 class Address(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    street_address = models.CharField(max_length=255)
+    full_name = models.CharField(max_length=255, default="Unknown")
+    mobile_number = models.CharField(max_length=15, blank=True, null=True)
+    pincode = models.CharField(max_length=10) 
+    street_address = models.TextField()
+    area = models.TextField(default="")
+    landmark = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=100)
-    state = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
-    zip_code = models.CharField(max_length=10)
+    state = models.CharField(max_length=100, choices=INDIAN_STATES, default="HP")
+    country = CountryField(default="IN") 
     is_default = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.user.username} - {self.street_address}, {self.city}"
+        return f"{self.full_name} - {self.street_address}, {self.city}"

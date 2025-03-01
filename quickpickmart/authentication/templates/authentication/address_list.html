@@ -1,31 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">My Addresses</h2>
-
-    <a href="{% url 'add_address' %}" class="btn btn-primary mb-3">Add New Address</a>
-
-    {% if addresses %}
-        <div class="row">
-            {% for address in addresses %}
-                <div class="col-md-6">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ address.street_address }}</h5>
-                            <p class="card-text">
-                                {{ address.city }}, {{ address.state }}, {{ address.country }} - {{ address.zip_code }}
-                            </p>
-                            <div class="d-flex justify-content-between">
-                                <a href="{% url 'edit_address' address.id %}" class="btn btn-warning">Edit</a>
-                                <a href="{% url 'delete_address' address.id %}" class="btn btn-danger">Delete</a>
-                            </div>
-                        </div>
+    <h2 class="mb-4">Your Addresses</h2>
+    <div class="row">
+        <!-- Add New Address Card -->
+        <div class="col-md-6 col-lg-4">
+            <div class="card text-center border-dashed shadow-sm p-4" style="border: 2px dashed #ccc; min-height: 230px; display: flex; justify-content: center; align-items: center;">
+                <a href="{% url 'add_address' %}" class="text-decoration-none text-dark">
+                    <div class="fs-1" ><p style="font-size:60px;">+</p></div>
+                    <p class="mt-2" style="font-size:25px;"> Add Address</p>
+                </a>
+            </div>
+        </div>
+        
+        {% for address in addresses %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card shadow-sm p-3 mb-4 border rounded">
+                <div class="card-body">
+                    <h5 class="card-title"><strong>{{ address.full_name }}</strong></h5>
+                    <p class="card-text">{{ address.street_address }}<br>
+                        {{ address.city }}, {{ address.state }}, {{ address.country }} - {{ address.pincode }}<br>
+                        Phone: {{ address.mobile_number }}
+                    </p>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'edit_address' address.id %}" class="btn btn-outline-primary btn-sm">Edit</a>
+                        <a href="{% url 'delete_address' address.id %}" class="btn btn-outline-danger btn-sm">Remove</a>
+                        <button class="btn btn-outline-success btn-sm">Set as Default</button>
                     </div>
                 </div>
-            {% endfor %}
+            </div>
         </div>
-    {% else %}
-        <p class="text-muted">You have not added any addresses yet.</p>
-    {% endif %}
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}

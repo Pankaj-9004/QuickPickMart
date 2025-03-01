@@ -1,35 +1,88 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
 {% block content %}
 <div class="container mt-4">
-    <h2 class="mb-4">{% if address %}Edit{% else %}Add{% endif %} Address</h2>
+    <h2 class="mb-3" style="margin-left:460px; font-weight:bold;font-size:25px;">{% if form.instance.pk %}Edit{% else %}Add{% endif %} Address</h2>
 
-    <form method="POST">
+    <form method="post" class="needs-validation" novalidate>
         {% csrf_token %}
-        <div class="mb-3">
-            <label class="form-label">Street Address</label>
-            {{ form.street_address }}
+
+        <div class="row" style="margin-left:300px; width:500px;">
+             <!-- Country Dropdown -->
+             <div class="col1 " >
+                <label for="{{ form.country.id_for_label }}" style="font-size:15px;font-weight:bold;">Country</label>
+                {{ form.country|add_class:"form-control" }}
+            </div><br>
+            <!-- Full Name -->
+            <div class="col1 ">
+                <label for="id_full_name" style="font-size:15px;font-weight:bold;">Full Name</label>
+                <input type="text" name="full_name" id="id_full_name" class="form-control" 
+                       value="{{ form.full_name.value|default_if_none:'' }}" placeholder="Full Name" required>
+                       <br>  </div>
+
+            <!-- Mobile Number -->
+            <div class="col1">
+                <label for="id_mobile_number" style="font-size:15px;font-weight:bold;">Mobile Number</label>
+                <input type="text" name="mobile_number" id="id_mobile_number" class="form-control" 
+                       value="{{ form.mobile_number.value|default_if_none:'' }}" placeholder="Mobile Number">
+          <br>  </div>
+
+            <!-- PIN Code -->
+            <div class="col1">
+                <label for="id_pincode" style="font-size:15px;font-weight:bold;">PIN Code</label>
+                <input type="text" name="pincode" id="id_pincode" class="form-control" 
+                       value="{{ form.pincode.value|default_if_none:'' }}" placeholder="PIN Code" required>
+                       <br> </div>
+
+            <!-- Street Address -->
+            <div class="col-md-12 mb-3">
+                <label for="id_street_address" style="font-size:15px;font-weight:bold;">Street Address</label>
+                <textarea name="street_address" id="id_street_address" class="form-control" rows="2" 
+                          placeholder="Street Address" required>{{ form.street_address.value|default_if_none:'' }}</textarea>
+                            </div>
+
+            <!-- Area -->
+            <div class="col1">
+                <label for="id_area" style="font-size:15px;font-weight:bold;">Area</label>
+                <textarea name="area" id="id_area" class="form-control" rows="2" 
+                          placeholder="Area Details">{{ form.area.value|default_if_none:'' }}</textarea>
+                          <br>   </div>
+
+            <!-- Landmark -->
+            <div class="col1">
+                <label for="id_landmark" style="font-size:15px;font-weight:bold;">Landmark (Optional)</label>
+                <input type="text" name="landmark" id="id_landmark" class="form-control" 
+                       value="{{ form.landmark.value|default_if_none:'' }}" placeholder="Landmark">
+                       <br>   </div>
+
+            <!-- City -->
+            <div class="col-md-6 mb-3">
+                <label for="id_city" style="font-size:15px;font-weight:bold;">City</label>
+                <input type="text" name="city" id="id_city" class="form-control" 
+                       value="{{ form.city.value|default_if_none:'' }}" placeholder="City" required>
+            </div>
+
+            <!-- State Dropdown (Fixed) -->
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.state.id_for_label }}" style="font-size:15px;font-weight:bold;">State</label>
+                {{ form.state|add_class:"form-control" }}
+            </div>
+
+           
+
+            <!-- Default Address Checkbox -->
+            <div class="col-md-12 form-check mb-3">
+                <input type="checkbox" name="is_default" id="id_is_default" class="form-check-input" style="margin-left:-8px;"
+                       {% if form.is_default.value %}checked{% endif %}>
+                <label class="form-check-label" for="id_is_default" style="margin-left:6px;" style="font-size:15px;font-weight:bold;">Set as Default Address</label>
+            </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label">City</label>
-            {{ form.city }}
-        </div>
-        <div class="mb-3">
-            <label class="form-label">State</label>
-            {{ form.state }}
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Country</label>
-            {{ form.country }}
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Zip Code</label>
-            {{ form.zip_code }}
-        </div>
-        <div class="mb-3 form-check">
-            {{ form.is_default }} 
-            <label class="form-check-label">Set as Default</label>
-        </div>
-        <button type="submit" class="btn btn-success">Save Address</button>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-warning" style="margin-left:310px;">Save Address</button>
+        <a href="{% url 'profile' %}" class="btn btn-secondary" >Cancel</a>
     </form>
-</div>
+</div><br><br>
 {% endblock %}

@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from .models import CustomUser, Profile, Address
+from django_countries.widgets import CountrySelectWidget
 
 
 # User Registeration Form
@@ -41,7 +42,8 @@ class LoginForm(AuthenticationForm):
 class VerifyEmailForm(forms.Form):
     otp = forms.CharField(max_length=6, required=True)
     
-    
+
+# User Profile Form
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
@@ -53,15 +55,22 @@ class ProfileForm(forms.ModelForm):
         }
         
 
+# User Address Form
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
-        fields = ['street_address', 'city', 'state', 'country', 'zip_code', 'is_default']
+        fields = [
+            'full_name', 'mobile_number', 'pincode', 'street_address', 'area', 'landmark', 'city', 'state', 'country', 'is_default'
+        ]
         widgets = {
-            'street_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter street address'}),
-            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter city'}),
-            'state': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter state'}),
-            'country': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter country'}),
-            'zip_code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter zip code'}),
+            'full_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Full Name'}),
+            'mobile_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Mobile Number'}),
+            'pincode': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'PIN Code'}),
+            'street_address': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Street Address', 'rows': 2}),
+            'area': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Area Details', 'rows': 2}),
+            'landmark': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Landmark (Optional)'}),
+            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'City'}),
+            'state': forms.Select(attrs={'class': 'form-control'}),
+            'country': CountrySelectWidget(attrs={'class': 'form-control'}),
             'is_default': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }

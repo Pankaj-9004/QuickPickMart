@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils.crypto import get_random_string
-from .models import CustomUser, Profile, Address
+from .models import CustomUser, Profile, Address, INDIAN_STATES
 from .forms import SignupForm, LoginForm, VerifyEmailForm, ProfileForm, AddressForm
 from django.contrib.auth.decorators import login_required
 
@@ -167,7 +167,7 @@ def add_address_view(request):
             return redirect("address_list")
     else:
         form = AddressForm()
-    return render(request, "authentication/address_form.html", {"form": form})
+    return render(request, "authentication/address_form.html", {"form": form, "INDIAN_STATES": INDIAN_STATES})
 
 
 # Lets users update existing addresses
