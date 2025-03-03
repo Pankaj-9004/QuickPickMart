@@ -229,7 +229,6 @@ def change_password_view(request):
             messages.error(request, "Please correct the errors below.")
     else:
         form = CustomPasswordChangeForm(user=request.user)
-
     return render(request, 'authentication/change_password.html', {'form': form})
 
 
@@ -245,7 +244,6 @@ def password_reset_request(request):
                 uid = urlsafe_base64_encode(force_bytes(user.pk))
                 token = default_token_generator.make_token(user)
                 reset_url = request.build_absolute_uri(reverse("password_reset_confirm", args=[uid, token]))
-                
                 # Send reset email
                 subject = "QuickPickMArt: Password Reset Request"
                 message = render_to_string("authentication/password_reset_email.html", {
@@ -258,7 +256,6 @@ def password_reset_request(request):
             return redirect("password_reset")
     else:
         form = PasswordResetRequestForm()
-    
     return render(request, "authentication/password_reset.html", {"form": form})
 
 
@@ -269,7 +266,6 @@ def password_reset_confirm(request, uidb64, token):
         user = User.objects.get(pk=uid)
     except (User.DoesNotExist, ValueError, TypeError):
         user = None
-
     if user and default_token_generator.check_token(user, token):
         if request.method == "POST":
             form = SetNewPasswordForm(user, request.POST)  # Pass `user` here
@@ -280,9 +276,7 @@ def password_reset_confirm(request, uidb64, token):
                 messages.success(request, "Your password has been successfully reset.")
                 return redirect("login")
         else:
-            form = SetNewPasswordForm(user)  # Pass `user` here for GET request
-
+            form = SetNewPasswordForm(user) 
         return render(request, "authentication/password_reset_confirm.html", {"form": form})
-
     messages.error(request, "Invalid or expired reset link.")
     return redirect("password_reset")
