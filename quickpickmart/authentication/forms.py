@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, SetPasswordForm
 from .models import CustomUser, Profile, Address
 from django_countries.widgets import CountrySelectWidget
 
@@ -74,3 +74,30 @@ class AddressForm(forms.ModelForm):
             'country': CountrySelectWidget(attrs={'class': 'form-control'}),
             'is_default': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+        
+
+# User Password Change Form
+class CustomPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'Current Password', 'class': 'form-control'})
+    )
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'New Password', 'class': 'form-control'})
+    )
+    new_password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'Confirm New Password', 'class': 'form-control'})
+    )
+    
+    class Meta:
+        fields = ['old_password', 'new_password1', 'new_password2']
+        
+
+# User Password Request Form
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(label="Enter your email", widget=forms.EmailInput(attrs={"class": "form-control"}))
+
+
+# User Set NewPassword Form
+class SetNewPasswordForm(SetPasswordForm):
+    new_password1 = forms.CharField(label="New Password", widget=forms.PasswordInput(attrs={"class": "form-control"}))
+    new_password2 = forms.CharField(label="Confirm New Password", widget=forms.PasswordInput(attrs={"class": "form-control"}))

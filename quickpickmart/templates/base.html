@@ -48,13 +48,13 @@
                                 {% comment %} <li><a class="dropdown-item" href="auth/profile/">Profile</a></li>
                                 <li><a class="dropdown-item" href="/orders/">My Orders</a></li> {% endcomment %}
                                 {% comment %} <li><hr class="dropdown-divider"></li> {% endcomment %}
-                                <li><a class="dropdown-item text-danger" href="/auth/logout/">Logout</a></li>
+                                <li><a class="dropdown-item text-danger" href="{% url "logout" %}">Logout</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="/cart/">Your Account</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url "youraccount" %}">Your Account</a></li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="/auth/login/">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/auth/signup/">Signup</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url "login" %}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url "signup" %}">Signup</a></li>
                     {% endif %}
                 </ul>
             </div>

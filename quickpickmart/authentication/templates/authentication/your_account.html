@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Your Account</h2>
+    <div class="row justify-content-center">
+        <!-- First Row -->
+        <div class="col-md-5 mb-3">
+            <a href="{% url 'profile' %}" class="account-card">
+                <div class="card text-center">
+                    <i class="fas fa-user-circle icon"></i>
+                    <h5 class="card-title">Your Profile</h5>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-5 mb-3">
+            <a href="{% url 'address_list' %}" class="account-card">
+                <div class="card text-center">
+                    <i class="fas fa-map-marker-alt icon"></i>
+                    <h5 class="card-title">Your Addresses</h5>
+                </div>
+            </a>
+        </div>
+
+        <!-- Second Row -->
+        <div class="col-md-5">
+            <a href="#" class="account-card">
+                <div class="card text-center">
+                    <i class="fas fa-box icon"></i>
+                    <h5 class="card-title">Your Orders</h5>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-5">
+            <a href="{% url "security_settings" %}" class="account-card">
+                <div class="card text-center">
+                    <i class="fas fa-lock icon"></i>
+                    <h5 class="card-title">Security Settings</h5>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

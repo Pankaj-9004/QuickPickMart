@@ -380,3 +380,190 @@
 .profile-btn:hover {
     background-color: #218838;
 }
+
+
+/* Your Accounts Page Styling */
+.account-card {
+    text-decoration: none;
+    color: #333;
+}
+
+.account-card .card {
+    padding: 20px;
+    border: 2px solid #ddd;
+    transition: all 0.3s ease-in-out;
+}
+
+.account-card .card:hover {
+    border-color: #e68a00;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.account-card .icon {
+    font-size: 50px;
+    color: #e68a00;
+    margin-bottom: 10px;
+}
+
+
+/* Security Settings Page Styling */
+.security-settings-container {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.security-card {
+    text-decoration: none;
+    color: #333;
+}
+
+.security-card .card {
+    padding: 20px;
+    border: 2px solid #ddd;
+    transition: all 0.3s ease-in-out;
+}
+
+.security-card .card:hover {
+    border-color: #e68a00;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.security-card .icon {
+    font-size: 50px;
+    color: #e68a00;
+    margin-bottom: 10px;
+}
+
+
+/* Change Password Form Styling */
+.change-password-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+}
+
+.change-password-card {
+    width: 400px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.update-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #e68a00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.update-btn:hover {
+    background-color: #e68a00;
+}
+
+
+/* Reset Password */
+.reset-password-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.reset-password-container h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.reset-password-container p {
+    color: #666;
+    font-size: 14px;
+}
+
+.reset-password-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.reset-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #e68a00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.reset-btn:hover {
+    background-color: #cc7700;
+}
+
+
+/* Reset Password Confirm */
+.reset-password-confirm-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.reset-password-confirm-container h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.reset-password-confirm-container p {
+    color: #666;
+    font-size: 14px;
+}
+
+.reset-password-confirm-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.reset-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #e68a00;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.reset-btn:hover {
+    background-color: #cc7700;
+}

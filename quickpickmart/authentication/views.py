@@ -1,12 +1,19 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, logout, authenticate, get_user_model
+from django.contrib.auth import login, logout, authenticate, get_user_model, update_session_auth_hash
 from django.contrib import messages
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.conf import settings
 from django.utils.crypto import get_random_string
 from .models import CustomUser, Profile, Address, INDIAN_STATES
-from .forms import SignupForm, LoginForm, VerifyEmailForm, ProfileForm, AddressForm
+from .forms import SignupForm, LoginForm, VerifyEmailForm, ProfileForm, AddressForm, CustomPasswordChangeForm, PasswordResetRequestForm, SetNewPasswordForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.urls import reverse
+from django.utils.html import strip_tags
 
 # Create your views here.
 
@@ -16,9 +23,13 @@ def send_otp_email(user):
     user.email_otp = otp
     user.save()
     
-    subject = "Email Verification OTP"
-    message = f"Your OTP for email verification is: {otp}"
-    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+    subject = "QuickPickMart: Email Verification OTP"
+    html_message = render_to_string("authentication/email_otp_template.html", {"otp": otp, "user": user})
+    plain_message = strip_tags(html_message)  # Fallback for email clients that don’t support HTML
+    
+    email = EmailMultiAlternatives(subject, plain_message, settings.DEFAULT_FROM_EMAIL, [user.email])
+    email.attach_alternative(html_message, "text/html")
+    email.send()
     
     
 # Signup View
@@ -93,13 +104,11 @@ def login_view(request):
             # Check if user exists
             User = get_user_model()
             user = User.objects.filter(email=email).first()
-            
             if user and not user.is_active:
                 messages.error(request, "Your account is not activated. Please verify your email.")
                 return render(request, 'authentication/login.html', {'form': form})
             # Authenticate user
             user = authenticate(request, email=email, password=password)
-
             if user:
                 login(request, user)
                 messages.success(request, "Login successful.")
@@ -130,13 +139,13 @@ def profile_view(request):
             profile.save()
             messages.success(request, "Profile picture updated successfully.")
             return redirect("profile")
-        else:  # Updating other fields
+        else: 
             new_username = request.POST.get("username", "").strip()
             # Ensure the username is unique (excluding the current user's username)
             if CustomUser.objects.exclude(id=user.id).filter(username=new_username).exists():
                 messages.error(request, "This username is already taken. Please choose another.")
             else:
-                user.username = new_username  # Update username
+                user.username = new_username
                 user.save()
                 form = ProfileForm(request.POST, request.FILES, instance=profile)
                 if form.is_valid():
@@ -188,10 +197,92 @@ def edit_address_view(request, address_id):
 # Allows users to remove an address
 @login_required
 def delete_address_view(request, address_id):
-    """View to delete an address."""
     address = get_object_or_404(Address, id=address_id, user=request.user)
     if request.method == "POST":
         address.delete()
         messages.success(request, "Address deleted successfully.")
         return redirect("address_list")
     return render(request, "authentication/address_delete.html", {"address": address})
+
+# Allows users to use sections in your accounts
+def your_account_view(request):
+    return render(request, "authentication/your_account.html")
+
+
+# Allows users to use security settings
+@login_required
+def security_settings_view(request):
+    return render(request, "authentication/security_settings.html")
+
+
+# Allows users to change password
+@login_required
+def change_password_view(request):
+    if request.method == 'POST':
+        form = CustomPasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Keep the user logged in after password change
+            messages.success(request, "Your password has been changed successfully.")
+            return redirect('security_settings')
+        else:
+            messages.error(request, "Please correct the errors below.")
+    else:
+        form = CustomPasswordChangeForm(user=request.user)
+
+    return render(request, 'authentication/change_password.html', {'form': form})
+
+
+# Allows users to reset password
+User = get_user_model()
+def password_reset_request(request):
+    if request.method == "POST":
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            user = User.objects.filter(email=email).first()
+            if user:
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                token = default_token_generator.make_token(user)
+                reset_url = request.build_absolute_uri(reverse("password_reset_confirm", args=[uid, token]))
+                
+                # Send reset email
+                subject = "QuickPickMArt: Password Reset Request"
+                message = render_to_string("authentication/password_reset_email.html", {
+                    "user": user,
+                    "reset_url": reset_url
+                })
+                send_mail(subject, "", settings.DEFAULT_FROM_EMAIL, [user.email], html_message=message)
+            
+            messages.success(request, "If an account with this email exists, you will receive a reset link shortly.")
+            return redirect("password_reset")
+    else:
+        form = PasswordResetRequestForm()
+    
+    return render(request, "authentication/password_reset.html", {"form": form})
+
+
+# Password reset confirmation
+def password_reset_confirm(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (User.DoesNotExist, ValueError, TypeError):
+        user = None
+
+    if user and default_token_generator.check_token(user, token):
+        if request.method == "POST":
+            form = SetNewPasswordForm(user, request.POST)  # Pass `user` here
+            if form.is_valid():
+                new_password = form.cleaned_data["new_password1"]
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, "Your password has been successfully reset.")
+                return redirect("login")
+        else:
+            form = SetNewPasswordForm(user)  # Pass `user` here for GET request
+
+        return render(request, "authentication/password_reset_confirm.html", {"form": form})
+
+    messages.error(request, "Invalid or expired reset link.")
+    return redirect("password_reset")
