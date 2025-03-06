@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     field.innerHTML += `<option value="${item.id}">${item.name}</option>`;
                 });
             })
-            .catch(error => console.error("Error fetching data:", error));  // Added error handling
+            .catch(error => console.error("Error fetching data:", error));
     }
 
     categoryField.addEventListener("change", function () {

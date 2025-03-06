@@ -8,14 +8,12 @@ class ProductAdminForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
         # Show only main categories (parent categories)
         self.fields['category'].queryset = Category.objects.filter(parent=None).order_by("name")
-        
         # Set default empty queryset for subcategories & sub-subcategories
         self.fields['subcategory'].queryset = Category.objects.none()
         self.fields['sub_subcategory'].queryset = Category.objects.none()
-
+        
         # Filter subcategories based on the selected category
         if 'category' in self.data:
             try:

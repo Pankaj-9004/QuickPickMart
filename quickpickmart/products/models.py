@@ -45,7 +45,6 @@ class Product(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def image_preview(self):
-        """Returns a small image preview for Django admin."""
         if self.image:
             return mark_safe(f'<img src="{self.image.url}" width="50" height="50" style="border-radius:5px;" />')
         return "No Image"

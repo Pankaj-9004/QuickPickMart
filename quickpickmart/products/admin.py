@@ -6,19 +6,19 @@ from .forms import ProductAdminForm
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "parent", "slug")  # Displays hierarchy in admin panel
-    search_fields = ("name", "slug")  # Search by name and slug
-    list_filter = ("parent",)  # Filter by parent category
-    prepopulated_fields = {"slug": ("name",)}  # Auto-generate slug from name
+    list_display = ("name", "parent", "slug")
+    search_fields = ("name", "slug")
+    list_filter = ("parent",)
+    prepopulated_fields = {"slug": ("name",)}
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     form = ProductAdminForm
-    list_display = ("title", "price", "stock", "category", "subcategory", "sub_subcategory", "image_preview")  # Added subcategory fields
-    search_fields = ("title", "category__name", "subcategory__name", "sub_subcategory__name")  # Added subcategory fields
-    list_filter = ("category", "subcategory", "sub_subcategory", "price", "stock")  # Added subcategory fields
-    readonly_fields = ("image_preview",)  # Prevent editing image preview
+    list_display = ("title", "price", "stock", "category", "subcategory", "sub_subcategory", "image_preview")
+    search_fields = ("title", "category__name", "subcategory__name", "sub_subcategory__name")
+    list_filter = ("category", "subcategory", "sub_subcategory", "price", "stock")
+    readonly_fields = ("image_preview",)
     
     class Media:
         js = ("products/js/script.js",)
