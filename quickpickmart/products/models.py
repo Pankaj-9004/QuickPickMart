@@ -34,13 +34,14 @@ class Category(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, limit_choices_to={'parent': None}, related_name="products")
+    subcategory = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="product_subcategories", null=True, blank=True)
+    sub_subcategory = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="product_sub_subcategories", blank=True, null=True)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
     image = models.ImageField(upload_to="product_images/")
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, limit_choices_to={'parent': None}, related_name="products")
-    subcategory = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="product_subcategories", null=True, blank=True)
-    sub_subcategory = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="product_sub_subcategories", blank=True, null=True)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
